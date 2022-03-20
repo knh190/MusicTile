@@ -1,3 +1,4 @@
+using EasyButtons;
 using UnityEngine;
 
 public class TileMap: MonoBehaviour
@@ -10,17 +11,18 @@ public class TileMap: MonoBehaviour
     public TileSound[] prefabs;
 
     [Min(2)]
-    public int width;
+    public int width = 3;
     [Min(2)]
-    public int height;
+    public int height = 3;
 
+    [Button]
     public void DestroyTiles()
     {
         if (tiles != null)
         {
             foreach (TileSound tile in tiles)
             {
-                Destroy(tile.gameObject);
+                if (tile != null) Destroy(tile.gameObject);
             }
             tiles = new TileSound[0];
 
@@ -28,6 +30,7 @@ public class TileMap: MonoBehaviour
         }
     }
 
+    [Button]
     public void CreateTiles()
     {
         DestroyTiles();
@@ -40,7 +43,7 @@ public class TileMap: MonoBehaviour
         {
             for (int j = 0; j < height; j ++)
             {
-                int idx = Mathf.FloorToInt(Random.Range(0, prefabs.Length));
+                int idx = Mathf.FloorToInt(Random.Range(0, prefabs.Length - 0.5f));
                 TileSound prefab = prefabs[idx];
                 Vector3 pos = transform.position + new Vector3(i, 0, j);
 
