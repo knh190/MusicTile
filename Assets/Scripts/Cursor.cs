@@ -1,30 +1,52 @@
 using UnityEngine;
 
-[RequireComponent(typeof(TileMap))]
+enum Movement { None, Up, Rt, Lt, Dn }
+
+[RequireComponent(typeof(SpriteRenderer))]
 public class Cursor : MonoBehaviour
 {
-    // @todo get input from keyboard
-    // @todo move cursor
-    // @todo activate and stop sound tiles
     // @todo display player sprite
 
-    private TileMap map;
+    // use the width and height to constraint cursor movement
+    public TileMap map;
 
-    void Awake()
+    private SpriteRenderer render;
+
+    private Movement nextMove = Movement.None;
+
+    void Awake() 
     {
-        map = GetComponent<TileMap>();
+        render = GetComponent<SpriteRenderer>();
+
+        if (map == null) 
+        {
+            Debug.LogError("Must assign TileMap to Cursor.");
+            return;
+        }
     }
 
     void Update()
     {
-        //
+        GetInput();
+
+        Move();
     }
 
     void GetInput()
     {
-        if (Input.GetKeyDown(KeyCode.A)) {}
-        if (Input.GetKeyDown(KeyCode.W)) {}
-        if (Input.GetKeyDown(KeyCode.S)) {}
-        if (Input.GetKeyDown(KeyCode.D)) {}
+        if (Input.GetKeyDown(KeyCode.A)) { nextMove = Movement.Lt; }
+        if (Input.GetKeyDown(KeyCode.W)) { nextMove = Movement.Up; }
+        if (Input.GetKeyDown(KeyCode.S)) { nextMove = Movement.Dn; }
+        if (Input.GetKeyDown(KeyCode.D)) { nextMove = Movement.Rt; }
+    }
+
+    void Move()
+    {
+        if (nextMove == Movement.None) return;
+
+        // @todo move transform
+        // @todo activate and deactivate soundtile from map
+
+        nextMove = Movement.None;
     }
 }

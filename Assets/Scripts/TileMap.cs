@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class TileMap: MonoBehaviour
 {
-    // @todo align tiles
     // @todo track player pos
 
     private TileSound[] tiles;
@@ -48,6 +47,7 @@ public class TileMap: MonoBehaviour
                 Vector3 pos = transform.position + new Vector3(i, 0, j);
 
                 TileSound tile = Instantiate(prefab, pos, Quaternion.identity);
+                tile.transform.SetParent(transform);
                 tiles[j * width + i] = tile;
             }
         }
