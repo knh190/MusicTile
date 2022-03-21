@@ -23,6 +23,11 @@ public class TileMap: MonoBehaviour
             {
                 if (tile != null) Destroy(tile.gameObject);
             }
+            // destroy all children
+            foreach (Transform child in transform.allChildren())
+            {
+                if (child.gameObject != null) Destroy(child.gameObject);
+            }
             tiles = new TileSound[0];
 
             Debug.Log("Tiles cleared.");
@@ -51,5 +56,37 @@ public class TileMap: MonoBehaviour
                 tiles[j * width + i] = tile;
             }
         }
+    }
+
+    public void StopSound(Vector3 pos)
+    {
+        // convert pos to 2d coords
+        int x = Mathf.FloorToInt(pos.x);
+        int y = Mathf.FloorToInt(pos.z);
+
+        if (x < 0 || y < 0 || x >= width || y >= height)
+        {
+            // @todo deactivate bgm
+            Debug.Log("Stop BGM.");
+            return;
+        }
+        // deactivate (x, y)
+        tiles[y * width + x].Stop();
+    }
+
+    public void PlaySound(Vector3 pos)
+    {
+        // convert pos to 2d coords
+        int x = Mathf.FloorToInt(pos.x);
+        int y = Mathf.FloorToInt(pos.z);
+
+        if (x < 0 || y < 0 || x >= width || y >= height)
+        {
+            // @todo activate bgm
+            Debug.Log("Play BGM.");
+            return;
+        }
+        // activate (x, y)
+        tiles[y * width + x].Play();
     }
 }

@@ -2,23 +2,24 @@ using UnityEngine;
 
 enum Movement { None, Up, Rt, Lt, Dn }
 
+// @todo animate player sprite
+//
 [RequireComponent(typeof(SpriteRenderer))]
 public class Cursor : MonoBehaviour
 {
-    // @todo display player sprite
-
     // use the width and height to constraint cursor movement
     public TileMap map;
 
+    // display sprite
     private SpriteRenderer render;
 
     private Movement nextMove = Movement.None;
 
-    void Awake() 
+    void Awake()
     {
         render = GetComponent<SpriteRenderer>();
 
-        if (map == null) 
+        if (map == null)
         {
             Debug.LogError("Must assign TileMap to Cursor.");
             return;
@@ -27,6 +28,12 @@ public class Cursor : MonoBehaviour
 
     void Update()
     {
+        if (map == null)
+        {
+            Debug.LogError("Must assign TileMap to Cursor.");
+            return;
+        }
+
         GetInput();
 
         Move();
@@ -44,8 +51,36 @@ public class Cursor : MonoBehaviour
     {
         if (nextMove == Movement.None) return;
 
-        // @todo move transform
-        // @todo activate and deactivate soundtile from map
+        Vector3 pos = transform.position;
+
+        // move transform, lock y position
+        // only move on x-z axis
+        switch (nextMove)
+        {
+        // also check boundary
+        case Movement.Lt:
+            if (pos.x <= -1) return;
+            transform.position = new Vector3(pos.x - 1, pos.y, pos.z);
+            break;
+        case Movement.Rt:
+            if (pos.x >= map.width) return;
+            transform.position = new Vector3(pos.x + 1, pos.y, pos.z);
+            break;
+        case Movement.Up:
+            if (pos.z >= map.height) return;
+            transform.position = new Vector3(pos.x, pos.y, pos.z + 1);
+            break;
+        case Movement.Dn:
+            if (pos.z <= -1) return;
+            transform.position = new Vector3(pos.x, pos.y, pos.z - 1);
+            break;
+
+        default:
+            break;
+        }
+        // activate and deactivate soundtile
+        map.StopSound(pos);
+        map.PlaySound(transform.position);
 
         nextMove = Movement.None;
     }
