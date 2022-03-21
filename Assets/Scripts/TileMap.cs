@@ -1,10 +1,9 @@
 using EasyButtons;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class TileMap: MonoBehaviour
 {
-    // @todo track player pos
-
     private TileSound[] tiles;
 
     public TileSound[] prefabs;
@@ -14,19 +13,23 @@ public class TileMap: MonoBehaviour
     [Min(2)]
     public int height = 3;
 
+    // play bgm
+    private AudioSource audio;
+
+    void Awake()
+    {
+        audio = GetComponent<AudioSource>();
+    }
+
     [Button]
     public void DestroyTiles()
     {
         if (tiles != null)
         {
-            foreach (TileSound tile in tiles)
-            {
-                if (tile != null) Destroy(tile.gameObject);
-            }
             // destroy all children
-            foreach (Transform child in transform.allChildren())
+            while (transform.childCount != 0)
             {
-                if (child.gameObject != null) Destroy(child.gameObject);
+                DestroyImmediate(transform.GetChild(0).gameObject);
             }
             tiles = new TileSound[0];
 
@@ -51,7 +54,7 @@ public class TileMap: MonoBehaviour
                 TileSound prefab = prefabs[idx];
                 Vector3 pos = transform.position + new Vector3(i, 0, j);
 
-                TileSound tile = Instantiate(prefab, pos, Quaternion.identity);
+                TileSound tile = Instantiate(prefab, pos, prefab.transform.rotation);
                 tile.transform.SetParent(transform);
                 tiles[j * width + i] = tile;
             }
@@ -66,8 +69,8 @@ public class TileMap: MonoBehaviour
 
         if (x < 0 || y < 0 || x >= width || y >= height)
         {
-            // @todo deactivate bgm
             Debug.Log("Stop BGM.");
+            ToggleBGM();
             return;
         }
         // deactivate (x, y)
@@ -82,11 +85,24 @@ public class TileMap: MonoBehaviour
 
         if (x < 0 || y < 0 || x >= width || y >= height)
         {
-            // @todo activate bgm
             Debug.Log("Play BGM.");
+            ToggleBGM();
             return;
         }
         // activate (x, y)
         tiles[y * width + x].Play();
+    }
+
+    public void ToggleBGM()
+    {
+        // ensure loop?
+        if (audio.isPlaying)
+        {
+            audio.Stop();
+            audio.enabled = false;
+        } else {
+            audio.enabled = true;
+            audio.Play();
+        }
     }
 }

@@ -21,6 +21,7 @@ public class TileSound : MonoBehaviour
 
     public void Stop()
     {
+        audio.Stop();
         audio.enabled = false;
     }
 }
