@@ -19,6 +19,10 @@ public class TileMap: MonoBehaviour
     void Awake()
     {
         audio = GetComponent<AudioSource>();
+
+        DestroyTiles();
+
+        CreateTiles();
     }
 
     [Button]
@@ -65,15 +69,17 @@ public class TileMap: MonoBehaviour
     {
         // convert pos to 2d coords
         int x = Mathf.FloorToInt(pos.x);
-        int y = Mathf.FloorToInt(pos.z);
+        int y = Mathf.FloorToInt(-pos.z);
+
+        Debug.Log("Stop Sound: " + x + ", " + y);
 
         if (x < 0 || y < 0 || x >= width || y >= height)
         {
-            Debug.Log("Stop BGM.");
             ToggleBGM();
             return;
         }
         // deactivate (x, y)
+
         tiles[y * width + x].Stop();
     }
 
@@ -81,11 +87,12 @@ public class TileMap: MonoBehaviour
     {
         // convert pos to 2d coords
         int x = Mathf.FloorToInt(pos.x);
-        int y = Mathf.FloorToInt(pos.z);
+        int y = Mathf.FloorToInt(-pos.z);
+
+        Debug.Log("Play Sound: " + x + ", " + y);
 
         if (x < 0 || y < 0 || x >= width || y >= height)
         {
-            Debug.Log("Play BGM.");
             ToggleBGM();
             return;
         }
@@ -98,9 +105,13 @@ public class TileMap: MonoBehaviour
         // ensure loop?
         if (audio.isPlaying)
         {
+            Debug.Log("Stop BGM.");
+
             audio.Stop();
             audio.enabled = false;
         } else {
+            Debug.Log("Play BGM.");
+
             audio.enabled = true;
             audio.Play();
         }

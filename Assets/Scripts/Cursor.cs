@@ -67,11 +67,11 @@ public class Cursor : MonoBehaviour
             transform.position = new Vector3(pos.x + 1, pos.y, pos.z);
             break;
         case Movement.Up:
-            if (pos.z >= map.height) return;
+            if (pos.z >= 0) return;
             transform.position = new Vector3(pos.x, pos.y, pos.z + 1);
             break;
         case Movement.Dn:
-            if (pos.z <= -1) return;
+            if (pos.z <= -map.height - 1) return;
             transform.position = new Vector3(pos.x, pos.y, pos.z - 1);
             break;
 
