@@ -6,6 +6,7 @@ using UnityEngine;
 public class TileSound : MonoBehaviour
 {
     private AudioSource audio;
+    public string colorName;
 
     void Awake() 
     {

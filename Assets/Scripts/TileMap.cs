@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class TileMap: MonoBehaviour
 {
-    private TileSound[] tiles;
+    private TileSound[,] tiles;
 
     public TileSound[] prefabs;
 
@@ -35,7 +35,7 @@ public class TileMap: MonoBehaviour
             {
                 DestroyImmediate(transform.GetChild(0).gameObject);
             }
-            tiles = new TileSound[0];
+            tiles = new TileSound[0, 0];
 
             Debug.Log("Tiles cleared.");
         }
@@ -48,7 +48,7 @@ public class TileMap: MonoBehaviour
 
         Debug.Log("Creating tiles: " + width + " x " + height);
 
-        tiles = new TileSound[width * height];
+        tiles = new TileSound[width, height];
 
         for (int i = 0; i < width; i++)
         {
@@ -56,11 +56,13 @@ public class TileMap: MonoBehaviour
             {
                 int idx = Mathf.FloorToInt(Random.Range(0, prefabs.Length - 0.5f));
                 TileSound prefab = prefabs[idx];
-                Vector3 pos = transform.position + new Vector3(i, 0, j);
+                Vector3 pos = transform.position + new Vector3(i, 0, height - j);
+
+                Debug.Log("Color: " + prefab.colorName + " Pos: " + i + "," + j);
 
                 TileSound tile = Instantiate(prefab, pos, prefab.transform.rotation);
                 tile.transform.SetParent(transform);
-                tiles[j * width + i] = tile;
+                tiles[i, j] = tile;
             }
         }
     }
@@ -80,7 +82,7 @@ public class TileMap: MonoBehaviour
         }
         // deactivate (x, y)
 
-        tiles[y * width + x].Stop();
+        tiles[x, y].Stop();
     }
 
     public void PlaySound(Vector3 pos)
@@ -97,7 +99,7 @@ public class TileMap: MonoBehaviour
             return;
         }
         // activate (x, y)
-        tiles[y * width + x].Play();
+        tiles[x, y].Play();
     }
 
     public void ToggleBGM()
