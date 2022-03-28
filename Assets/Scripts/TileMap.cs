@@ -118,11 +118,9 @@ public class TileMap: MonoBehaviour
             Debug.Log("Stop BGM.");
 
             audio.Stop();
-            audio.enabled = false;
         } else {
             Debug.Log("Play BGM.");
 
-            audio.enabled = true;
             audio.Play();
         }
     }
