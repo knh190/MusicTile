@@ -15,9 +15,15 @@ public class Cursor : MonoBehaviour
 
     private Movement nextMove = Movement.None;
 
+    private Animator animator;
+
+    public string color;
+
     void Awake()
     {
         render = GetComponent<SpriteRenderer>();
+
+        animator = GetComponent<Animator>();
 
         if (map == null)
         {
@@ -37,6 +43,8 @@ public class Cursor : MonoBehaviour
         GetInput();
 
         Move();
+
+        ChangeSprite();
     }
 
     void GetInput()
@@ -83,5 +91,62 @@ public class Cursor : MonoBehaviour
         map.PlaySound(transform.position);
 
         nextMove = Movement.None;
+    }
+
+    void ChangeSprite()
+    {
+        Vector3 pos = transform.position;
+        color = map.GetColor(pos).ToLower();
+
+        switch (color)
+        {
+            case "red":
+                if(animator.GetInteger("assets") != 0)
+                {
+                    animator.SetBool("changeState", true);
+                    animator.SetInteger("assets", 0);
+                }else
+                {
+                    animator.SetBool("changeState", false);
+                }
+                
+                animator.speed = 1; break;
+            case "orange":
+                if (animator.GetInteger("assets") != 1)
+                {
+                    animator.SetBool("changeState", true);
+                    animator.SetInteger("assets", 1);
+                }
+                else
+                {
+                    animator.SetBool("changeState", false);
+                }
+
+                animator.speed = 1; break;
+            case "purple":
+                if (animator.GetInteger("assets") != 2)
+                {
+                    animator.SetBool("changeState", true);
+                    animator.SetInteger("assets", 2);
+                }
+                else
+                {
+                    animator.SetBool("changeState", false);
+                }
+
+                animator.speed = 1; break;
+            case "blue":
+                if (animator.GetInteger("assets") != 3)
+                {
+                    animator.SetBool("changeState", true);
+                    animator.SetInteger("assets", 3);
+                }
+                else
+                {
+                    animator.SetBool("changeState", false);
+                }
+
+                animator.speed = 1; break;
+        }
     }
 }
