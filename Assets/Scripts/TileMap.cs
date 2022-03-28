@@ -52,7 +52,7 @@ public class TileMap: MonoBehaviour
 
         for (int i = 0; i < width; i++)
         {
-            for (int j = 0; j < height; j ++)
+            for (int j = 0; j < height; j++)
             {
                 int idx = Mathf.FloorToInt(Random.Range(0, prefabs.Length - 0.5f));
                 TileSound prefab = prefabs[idx];

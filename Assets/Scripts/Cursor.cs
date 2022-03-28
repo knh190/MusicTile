@@ -135,7 +135,7 @@ public class Cursor : MonoBehaviour
                 }
 
                 animator.speed = 1; break;
-            case "blue":
+            default: // Originally case "blue":
                 if (animator.GetInteger("assets") != 3)
                 {
                     animator.SetBool("changeState", true);
