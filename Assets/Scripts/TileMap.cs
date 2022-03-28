@@ -102,6 +102,14 @@ public class TileMap: MonoBehaviour
         tiles[x, y].Play();
     }
 
+    public string GetColor(Vector3 pos)
+    {
+        int x = Mathf.FloorToInt(pos.x);
+        int y = Mathf.FloorToInt(-pos.z);
+
+        return tiles[x, y].colorName;
+    }
+
     public void ToggleBGM()
     {
         // ensure loop?
