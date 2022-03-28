@@ -16,7 +16,6 @@ public class TileSound : MonoBehaviour
         if (animator != null)
         {
             animator.enabled = true;
-            animator.speed = 0;
         }
         audio.enabled = false;
     }
@@ -26,7 +25,7 @@ public class TileSound : MonoBehaviour
         audio.enabled = true;
         if (animator != null)
         {
-            animator.Play(0, -1, 0);
+            animator.SetBool("IsActive", true);
             animator.speed = 1;
         }
         audio.Play();
@@ -37,8 +36,7 @@ public class TileSound : MonoBehaviour
         audio.Stop();
         if (animator != null)
         {
-            animator.Play(0, -1, 0);
-            animator.speed = 0;
+            animator.SetBool("IsActive", false);
         }
         audio.enabled = false;
     }
